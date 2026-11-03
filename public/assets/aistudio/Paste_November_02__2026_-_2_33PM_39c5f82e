@@ -1,0 +1,1085 @@
+# PROJECT: DESIGN AND IMPLEMENTATION OF A COMPUTER HARDWARE DIAGNOSTIC AND MONITORING SYSTEM
+
+## MASTER PROMPT FOR GOOGLE AI STUDIO
+
+Act as a senior software engineer, computer hardware specialist, systems programmer, cybersecurity engineer, product designer and technical product architect.
+
+I want you to design and build a comprehensive Computer Hardware Diagnostic and Monitoring System.
+
+The application should help users inspect their computer specifications, monitor hardware performance, detect potential hardware problems, run diagnostic tests, monitor system health and generate professional diagnostic reports.
+
+This must be a real, functional software product, not simply a collection of attractive dashboard screens.
+
+Build an application that looks and feels like a professional computer diagnostic utility that could be used by computer technicians, IT support professionals, students and ordinary computer users.
+
+Prioritize:
+- Accurate hardware information.
+- Reliable diagnostic procedures.
+- Useful troubleshooting recommendations.
+- Real-time system monitoring where supported.
+- Professional data visualization.
+- Excellent user experience.
+- Privacy and security.
+- Cross-platform compatibility.
+
+Do not fabricate hardware information or display simulated values as actual readings.
+
+---
+
+# 1. PRODUCT VISION
+
+The application should solve common computer maintenance and troubleshooting problems.
+
+Users should be able to:
+- Identify their computer's hardware specifications.
+- Monitor CPU performance.
+- Monitor RAM usage.
+- Check storage capacity and health.
+- Monitor CPU and GPU temperatures where supported.
+- Inspect GPU specifications.
+- Check battery health on supported laptops.
+- Identify hardware performance problems.
+- Run diagnostic tests.
+- Detect abnormal hardware conditions.
+- Receive troubleshooting recommendations.
+- Generate downloadable diagnostic reports.
+
+The application should provide a centralized computer health overview.
+
+Its primary objective is to make hardware diagnostics understandable even to people who are not computer hardware experts.
+
+# 2. PRODUCT IDENTITY AND DESIGN
+
+Create a modern professional diagnostic product.
+
+Suggested product name: HardwareScope.
+
+The product name should be configurable.
+
+Design inspiration:
+- Professional PC diagnostic applications.
+- Modern operating system monitoring tools.
+- Premium SaaS analytics dashboards.
+- Hardware performance monitoring interfaces.
+
+Use a sophisticated visual design.
+
+Suggested palette:
+
+- Background: #F5F7FA.
+- Primary: #176B87.
+- Deep Navy: #142B3B.
+- Surface: #FFFFFF.
+- Success: #20A66A.
+- Warning: #E8A23B.
+- Danger: #DF5555.
+- Primary text: #182630.
+- Secondary text: #77838E.
+- Borders: #E6EBEF.
+
+Typography:
+Use Inter or Geist.
+
+Design requirements:
+- Excellent visual hierarchy.
+- Clean dashboard layouts.
+- Professional data tables.
+- Elegant charts and graphs.
+- Attractive metric cards.
+- Clear status indicators.
+- Subtle transitions.
+- Consistent iconography.
+- Responsive layouts.
+- Beautiful empty states.
+- Loading skeletons.
+- Helpful tooltips.
+
+Create a collapsible desktop sidebar.
+
+The dashboard should feel like a serious hardware diagnostic utility rather than a generic administration dashboard.
+
+Support light and dark modes.
+
+The dark mode should be especially polished because users may want to keep the monitoring dashboard open while working.
+
+# 3. CORE APPLICATION ARCHITECTURE
+
+Build two connected components.
+
+## A. WEB APPLICATION
+
+The web application provides:
+- User interface.
+- Hardware overview.
+- Performance dashboards.
+- Diagnostic results.
+- Charts.
+- Reports.
+- Troubleshooting recommendations.
+- Settings.
+
+Preferred frontend:
+- React.
+- TypeScript.
+- Tailwind CSS.
+- Lucide icons.
+- Recharts.
+- React Router.
+
+## B. LOCAL DIAGNOSTIC AGENT
+
+Create an optional lightweight local diagnostic service that runs on the user's computer.
+
+Its purpose is to collect hardware information that normal browser applications cannot reliably access.
+
+Suggested implementation:
+- Node.js or Python for the local agent.
+- OS-specific hardware monitoring libraries.
+- A secure localhost API.
+- WebSocket communication for real-time metrics.
+
+The local agent should be responsible for collecting:
+- CPU temperature.
+- CPU model and specifications.
+- Actual system RAM usage.
+- GPU information.
+- GPU temperature where supported.
+- Storage SMART information.
+- Battery health.
+- Operating system information.
+- Hardware sensor readings.
+
+The web application should connect to the local agent securely.
+
+If the local agent is unavailable, display browser-accessible information and clearly explain which additional readings require the agent.
+
+IMPORTANT:
+
+A browser-only application cannot reliably access CPU temperatures, disk SMART information or all system-wide hardware metrics.
+
+Do not fabricate these readings.
+
+Never present random numbers or demo data as actual hardware measurements.
+
+Create clear statuses:
+- Available.
+- Unavailable.
+- Permission required.
+- Agent disconnected.
+- Unsupported hardware.
+- Demo data.
+
+Build the web application so it remains useful even when the local agent is not installed.
+
+# 4. MAIN DASHBOARD
+
+Create an exceptional computer health dashboard.
+
+The dashboard should provide a complete summary of the user's computer.
+
+## A. Overall system health
+
+Display a prominent system health score from 0 to 100.
+
+Example:
+
+100 - Excellent.
+85–99 - Good.
+70–84 - Fair.
+50–69 - Needs attention.
+Below 50 - Critical.
+
+The score must be calculated using actual available diagnostic information and documented scoring rules.
+
+If important readings are unavailable, indicate that the score is provisional or incomplete.
+
+Do not automatically assign a perfect score when data is missing.
+
+Display a summary such as:
+
+"Your computer is healthy."
+
+Or:
+
+"Your computer needs attention. Two potential issues were identified."
+
+Include the last diagnostic time.
+
+## B. Hardware overview cards
+
+Create separate cards for:
+
+1. CPU.
+2. RAM.
+3. GPU.
+4. Storage.
+5. Temperature.
+6. Battery, where applicable.
+
+Each card should show:
+- Component name.
+- Current reading.
+- Health status.
+- Relevant usage percentage.
+- Small trend graph.
+- Last updated time.
+
+Clicking a card should open its detailed monitoring page.
+
+## C. Recent diagnostic activity
+
+Show:
+- Recently completed tests.
+- Recently detected problems.
+- Hardware status changes.
+- Recent reports.
+
+## D. Quick actions
+
+Provide:
+- Run full diagnostic.
+- View hardware specifications.
+- Check storage health.
+- Run memory diagnostic guidance.
+- Generate health report.
+- Refresh system information.
+
+# 5. CPU MONITORING AND DIAGNOSTICS
+
+Create a dedicated CPU monitoring section.
+
+Display:
+
+- Processor name.
+- Manufacturer.
+- CPU architecture.
+- Number of physical cores.
+- Number of logical processors.
+- Base frequency.
+- Current frequency, where available.
+- Maximum supported frequency, where available.
+- CPU utilization.
+- CPU temperature, where supported.
+- CPU load history.
+
+Use a real-time line chart to show CPU utilization.
+
+Include:
+- Current usage.
+- Average usage.
+- Peak usage.
+- Historical performance.
+
+## CPU diagnostics
+
+Implement safe diagnostic checks:
+
+1. CPU identification.
+2. CPU load monitoring.
+3. Frequency monitoring.
+4. Temperature monitoring.
+5. Performance anomaly detection.
+6. Thermal warning detection.
+
+Where practical, provide an optional short CPU benchmark.
+
+Benchmark requirements:
+- User must explicitly start the test.
+- Explain that CPU usage and temperature may increase.
+- Allow cancellation.
+- Limit test duration.
+- Monitor temperature where supported.
+- Stop safely if a configurable thermal safety limit is reached.
+- Never claim that a benchmark proves the CPU is completely healthy.
+
+Display understandable results.
+
+Example:
+
+"CPU utilization is unusually high."
+
+Possible explanations:
+- Too many background processes.
+- Resource-intensive applications.
+- Possible software-related performance problems.
+
+# 6. RAM MONITORING AND DIAGNOSTICS
+
+Create a dedicated memory monitoring interface.
+
+Display:
+
+- Total installed RAM.
+- Used RAM.
+- Available RAM.
+- Memory utilization.
+- Memory type, where available.
+- Memory speed, where available.
+- Number of memory modules, where available.
+
+Use an attractive memory utilization chart.
+
+Example:
+
+Installed memory: 16 GB.
+Used memory: 9.4 GB.
+Available memory: 6.6 GB.
+Utilization: 58.75%.
+
+Only show values obtained from actual system information.
+
+## Memory diagnostics
+
+Include:
+- Memory usage monitoring.
+- High memory usage detection.
+- Memory pressure warnings.
+- Memory information inspection.
+- Optional memory diagnostic guidance.
+
+Do not claim to detect faulty RAM through ordinary usage monitoring alone.
+
+If a deeper memory test requires restarting the computer or using an external operating-system utility, explain this to the user and provide instructions.
+
+# 7. STORAGE HEALTH MONITORING
+
+Build a comprehensive storage monitoring module.
+
+Detect supported storage devices.
+
+Display:
+- Drive name.
+- Drive model.
+- Storage type.
+- Total capacity.
+- Used space.
+- Available space.
+- Drive temperature, where supported.
+- Health status.
+- SMART information, where supported.
+
+Support:
+- HDD.
+- SATA SSD.
+- NVMe SSD.
+- External storage devices where accessible.
+
+## Storage health checks
+
+Where supported, inspect:
+- SMART overall health.
+- Reallocated sector count.
+- Pending sector count.
+- Uncorrectable errors.
+- Media and data integrity errors.
+- Wear level.
+- Percentage used.
+- Power-on hours.
+- Available spare capacity.
+- Critical warnings.
+
+The exact attributes differ by device and manufacturer.
+
+Interpret available SMART information carefully.
+
+Do not assume every SMART attribute applies to every drive.
+
+Display statuses:
+- Healthy.
+- Caution.
+- Critical.
+- Unsupported.
+- Unavailable.
+
+## Storage space analysis
+
+Provide:
+- Storage utilization charts.
+- Drive capacity overview.
+- Low disk space warnings.
+- Optional large-file analysis if permissions allow.
+
+Do not delete or modify files automatically.
+
+# 8. TEMPERATURE MONITORING
+
+Create a dedicated temperature monitoring section.
+
+Where supported, collect:
+
+- CPU temperature.
+- GPU temperature.
+- Storage temperature.
+- Other available hardware sensor readings.
+
+Display:
+- Current temperature.
+- Minimum temperature.
+- Maximum temperature.
+- Temperature history.
+- Warning status.
+
+Use line charts for temperature changes.
+
+Provide configurable temperature thresholds based on the hardware's supported specifications.
+
+Do not apply one universal temperature limit to every CPU and GPU.
+
+When temperature readings are unavailable, explain why.
+
+Include a helpful message:
+
+"Temperature monitoring requires the local diagnostic agent and compatible hardware sensors."
+
+# 9. GPU MONITORING
+
+Create a detailed graphics hardware module.
+
+Display:
+- GPU manufacturer.
+- GPU model.
+- Dedicated graphics memory.
+- Integrated or dedicated GPU classification.
+- GPU utilization.
+- GPU temperature, where supported.
+- Driver version, where available.
+- Supported graphics APIs.
+
+Where supported, show:
+- GPU memory usage.
+- Clock frequency.
+- Fan speed.
+- Power consumption.
+
+Include GPU monitoring charts.
+
+Identify potential GPU-related performance issues.
+
+Do not display unsupported sensor readings as zero.
+
+# 10. BATTERY HEALTH DIAGNOSTICS
+
+For laptop users, create a battery health module.
+
+Display:
+- Current charge.
+- Battery capacity.
+- Original design capacity.
+- Current full-charge capacity.
+- Battery health percentage.
+- Charging status.
+- Charging cycles, where available.
+- Estimated remaining time, where supported.
+
+Calculate battery health:
+
+Battery health = (Current full-charge capacity / Original design capacity) × 100.
+
+Provide understandable battery conditions:
+- Excellent.
+- Good.
+- Degraded.
+- Replace soon.
+
+For desktop computers, hide the battery module or explain that no supported battery was detected.
+
+# 11. HARDWARE SPECIFICATION REPORT
+
+Create a detailed hardware information page.
+
+Organize specifications into categories.
+
+### System information
+- Computer manufacturer.
+- Computer model.
+- Operating system.
+- OS version.
+- System architecture.
+- Hostname, if available.
+- System uptime, where supported.
+
+### Processor
+- CPU model.
+- Manufacturer.
+- Cores.
+- Threads.
+- Frequency.
+
+### Memory
+- Installed RAM.
+- Available RAM.
+- Memory configuration.
+
+### Graphics
+- GPU model.
+- GPU manufacturer.
+- Graphics memory.
+
+### Storage
+- Connected drives.
+- Capacity.
+- Available space.
+- Drive types.
+
+### Other hardware
+- Motherboard information, where supported.
+- BIOS version, where supported.
+- Network adapters.
+- Display information.
+
+Allow users to copy or export their hardware specifications.
+
+# 12. DIAGNOSTIC TEST CENTER
+
+Create a dedicated diagnostic test center.
+
+This should be one of the most important areas of the application.
+
+Users should be able to select individual tests or run a complete diagnostic.
+
+Include:
+
+1. CPU diagnostic.
+2. RAM diagnostic.
+3. Storage diagnostic.
+4. GPU diagnostic.
+5. Temperature diagnostic.
+6. Battery diagnostic.
+7. System information scan.
+
+## Full system diagnostic
+
+When the user selects "Run Full Diagnostic":
+
+1. Check local agent connectivity.
+2. Collect available system specifications.
+3. Inspect CPU status.
+4. Inspect memory status.
+5. Inspect storage health.
+6. Inspect GPU status.
+7. Inspect temperature sensors.
+8. Inspect battery status where applicable.
+9. Analyze available readings.
+10. Generate a diagnostic summary.
+
+Display a professional progress interface.
+
+Each diagnostic should have:
+- Test name.
+- Current progress.
+- Status.
+- Start time.
+- Completion time.
+- Result.
+
+Allow cancellation where safe.
+
+Clearly distinguish between:
+- Passed.
+- Warning.
+- Failed.
+- Skipped.
+- Unsupported.
+- Unable to test.
+
+A skipped or unsupported test must never be treated as a successful test.
+
+# 13. INTELLIGENT PROBLEM DETECTION
+
+Build a rule-based diagnostic recommendation engine.
+
+The application should inspect available hardware readings and identify possible problems.
+
+Examples:
+
+### CPU
+High CPU utilization over a sustained period.
+
+Possible explanation:
+- Excessive background processes.
+- Resource-intensive applications.
+- Software-related performance bottlenecks.
+
+### RAM
+Very high memory utilization.
+
+Possible explanation:
+- Too many running applications.
+- Memory-intensive software.
+- Possible memory pressure.
+
+### Storage
+SMART warnings or critically low disk space.
+
+Possible explanation:
+- Drive degradation.
+- Insufficient free storage.
+- Potential data integrity problems.
+
+### Temperature
+Abnormally high temperature relative to supported hardware specifications.
+
+Possible explanation:
+- Restricted airflow.
+- Dust accumulation.
+- Cooling system problems.
+- Heavy workloads.
+
+### Battery
+Significantly reduced full-charge capacity.
+
+Possible explanation:
+- Battery aging.
+- Battery degradation.
+
+Every identified issue should include:
+
+- Problem title.
+- Severity.
+- Affected component.
+- Detected value.
+- Expected or configured threshold.
+- Explanation.
+- Potential causes.
+- Recommended action.
+
+Use these severity levels:
+- Informational.
+- Low.
+- Moderate.
+- High.
+- Critical.
+
+Do not make unsupported conclusions.
+
+Use language such as "possible issue" when the available evidence is not sufficient for a definitive diagnosis.
+
+# 14. TROUBLESHOOTING ASSISTANT
+
+Build an interactive troubleshooting assistant.
+
+The assistant should guide users through common computer hardware problems.
+
+Example problems:
+
+- Computer is overheating.
+- Computer is unusually slow.
+- Computer restarts unexpectedly.
+- Hard drive is running out of space.
+- Battery drains quickly.
+- Computer freezes frequently.
+- GPU performance is poor.
+- Memory usage is unusually high.
+
+For each issue, provide:
+
+1. Description of the problem.
+2. Possible causes.
+3. Safe troubleshooting steps.
+4. Recommended diagnostic tests.
+5. When to seek professional repair.
+
+Provide step-by-step guidance.
+
+Avoid recommending dangerous hardware operations to inexperienced users.
+
+Never automatically execute system modifications.
+
+The troubleshooting assistant should use actual diagnostic findings when available, rather than inventing a diagnosis.
+
+# 15. PERFORMANCE HISTORY
+
+Build a system performance history page.
+
+Store and visualize available readings over time.
+
+Include:
+- CPU usage history.
+- RAM usage history.
+- GPU usage history.
+- Temperature history.
+- Storage health changes.
+- Battery health history.
+
+Allow users to select:
+- Last 15 minutes.
+- Last hour.
+- Last 24 hours.
+- Last 7 days.
+- Custom date range where historical data exists.
+
+Display average, minimum and maximum values.
+
+Allow users to pause live monitoring.
+
+Make monitoring intervals configurable.
+
+Avoid excessive resource consumption from continuous data collection.
+
+# 16. DIAGNOSTIC REPORT GENERATION
+
+Build a professional report generator.
+
+Allow users to generate reports containing:
+
+### System summary
+- Computer model.
+- Operating system.
+- Scan date.
+- Overall health score.
+
+### Hardware information
+- CPU.
+- RAM.
+- GPU.
+- Storage.
+- Battery.
+- Available sensors.
+
+### Diagnostic results
+- Tests completed.
+- Tests passed.
+- Warnings.
+- Failed tests.
+- Unsupported tests.
+
+### Detected problems
+- Problem description.
+- Severity.
+- Evidence.
+- Recommended actions.
+
+### Conclusion
+Provide a concise assessment of the system's condition based on the available evidence.
+
+Export reports as:
+- PDF.
+- JSON.
+- CSV.
+
+Create professional PDF reports with clean typography, charts, tables and application branding.
+
+Allow users to save previous diagnostic reports and compare results over time.
+
+Never include fabricated readings in reports.
+
+# 17. NOTIFICATION AND ALERT SYSTEM
+
+Create a notification centre.
+
+Alert users when:
+- CPU temperature becomes unusually high.
+- GPU temperature becomes unusually high.
+- RAM utilization remains critically high.
+- Storage health reports a warning.
+- Disk space becomes critically low.
+- Battery health deteriorates.
+- The diagnostic agent disconnects.
+
+Provide:
+- Alert severity.
+- Timestamp.
+- Affected component.
+- Explanation.
+- Recommended action.
+
+Allow users to configure notification preferences.
+
+Prevent repeated alerts from flooding the interface.
+
+# 18. DIAGNOSTIC AGENT SECURITY
+
+The local diagnostic agent is a sensitive component.
+
+Implement strict security.
+
+Requirements:
+
+- Bind the service to localhost only.
+- Never expose it publicly by default.
+- Validate requests.
+- Use an authenticated connection or secure local pairing mechanism.
+- Restrict browser origins.
+- Never allow arbitrary shell command execution from the web application.
+- Never expose unrestricted filesystem access.
+- Never upload private system information without consent.
+- Clearly explain permissions.
+- Provide a disconnect option.
+
+Only implement read-only hardware inspection by default.
+
+Any benchmark or stress test must require explicit user consent.
+
+Do not run dangerous stress tests automatically.
+
+Do not make the local agent execute arbitrary commands provided by the frontend.
+
+# 19. DATA PRIVACY
+
+Privacy must be built into the application.
+
+By default:
+- Collect hardware information locally.
+- Do not require users to create an account for basic diagnostics.
+- Do not upload hardware reports automatically.
+- Do not collect personal files.
+- Do not scan file contents without explicit permission.
+- Allow users to delete saved diagnostic history.
+- Clearly communicate what information is collected.
+
+Cloud synchronization can be optional in a future version.
+
+# 20. USER INTERFACE AND NAVIGATION
+
+Create the following navigation:
+
+SIDEBAR:
+
+1. Overview.
+2. Hardware Specifications.
+3. CPU Monitor.
+4. Memory Monitor.
+5. GPU Monitor.
+6. Storage Health.
+7. Temperature Monitor.
+8. Battery Health.
+9. Diagnostic Center.
+10. Performance History.
+11. Troubleshooting.
+12. Diagnostic Reports.
+13. Settings.
+
+The dashboard should provide quick access to the most important functions.
+
+Every card should navigate to its detailed module.
+
+# 21. SETTINGS
+
+Create a complete settings page.
+
+Include:
+- Appearance.
+- Light and dark mode.
+- Monitoring refresh interval.
+- Temperature warning thresholds.
+- Storage warning thresholds.
+- Memory warning thresholds.
+- Notification preferences.
+- Diagnostic history retention.
+- Local diagnostic agent connection.
+- Privacy controls.
+- About the application.
+
+# 22. TECHNICAL IMPLEMENTATION
+
+Preferred stack:
+
+Frontend:
+- React.
+- TypeScript.
+- Tailwind CSS.
+- Recharts.
+- Lucide icons.
+- React Router.
+
+Local agent:
+- Node.js or Python.
+- Platform-specific hardware monitoring libraries.
+- Local REST API.
+- WebSocket for live updates.
+
+Suggested platform support:
+- Windows first.
+- Linux support where hardware interfaces are available.
+- macOS support where supported by platform APIs and permissions.
+
+Design the agent with platform-specific adapters so additional operating systems can be supported without rewriting the entire application.
+
+Use a modular architecture:
+
+- components/
+- pages/
+- services/
+- hooks/
+- types/
+- utilities/
+- diagnostic-engine/
+- hardware-agent/
+- reports/
+- monitoring/
+
+Use proper TypeScript interfaces.
+
+Create reusable chart components and metric cards.
+
+Separate hardware data collection from data visualization.
+
+Never hardcode hardware readings.
+
+# 23. DEMONSTRATION MODE
+
+Create a demonstration mode for users who do not have the local agent installed.
+
+Include realistic fictional sample hardware information.
+
+Clearly label all demonstration data:
+
+"DEMO DATA — NOT LIVE HARDWARE READINGS."
+
+Allow users to explore:
+- Dashboard.
+- CPU monitoring.
+- RAM monitoring.
+- Storage health.
+- Temperature monitoring.
+- Diagnostic center.
+- Diagnostic reports.
+
+Demo data must never be confused with actual system readings.
+
+When the agent connects successfully, switch to live data and display the connection status.
+
+# 24. REQUIRED SCREENS
+
+Build all these screens:
+
+1. Welcome/onboarding screen.
+2. Main dashboard.
+3. Hardware overview.
+4. CPU details.
+5. RAM details.
+6. GPU details.
+7. Storage details.
+8. Temperature monitoring.
+9. Battery monitoring.
+10. Diagnostic test center.
+11. Active diagnostic progress screen.
+12. Diagnostic results.
+13. Troubleshooting assistant.
+14. Performance history.
+15. Report history.
+16. Report preview.
+17. Application settings.
+18. Local agent connection screen.
+19. About and help.
+
+# 25. TESTING AND QUALITY ASSURANCE
+
+Test the following:
+
+1. Application launches correctly.
+2. Dashboard renders correctly.
+3. Hardware information loads when available.
+4. Unsupported readings are handled correctly.
+5. Local agent connection works.
+6. Local agent disconnection is handled.
+7. Live metrics update correctly.
+8. Diagnostic tests execute safely.
+9. Diagnostic findings are calculated correctly.
+10. Reports contain actual diagnostic results.
+11. PDF exports work.
+12. Historical charts display stored readings.
+13. Dark mode works.
+14. Mobile layout works.
+15. Permission errors are handled.
+16. Invalid hardware readings do not crash the application.
+17. Missing sensors do not generate false alarms.
+
+Fix errors before considering the application complete.
+
+# 26. DEVELOPMENT PHASES
+
+Build the application in the following order.
+
+PHASE 1: Foundation
+- Project setup.
+- Product identity.
+- Design system.
+- Application navigation.
+- Dashboard layout.
+- Demonstration data.
+
+PHASE 2: Hardware information
+- CPU specifications.
+- RAM specifications.
+- GPU specifications.
+- Storage information.
+- Operating system information.
+
+PHASE 3: Local diagnostic agent
+- Agent architecture.
+- Secure localhost connection.
+- Hardware data collection.
+- Live metrics.
+- Error handling.
+
+PHASE 4: Monitoring
+- CPU monitoring.
+- RAM monitoring.
+- GPU monitoring.
+- Storage health.
+- Temperature.
+- Battery health.
+
+PHASE 5: Diagnostic engine
+- Hardware inspection.
+- Diagnostic tests.
+- Anomaly detection.
+- Health scoring.
+- Troubleshooting recommendations.
+
+PHASE 6: Reports and advanced features
+- Performance history.
+- Diagnostic history.
+- PDF reports.
+- Notifications.
+- Settings.
+
+PHASE 7: Testing and deployment
+- Security testing.
+- Cross-platform testing.
+- Responsive design.
+- Performance optimization.
+- Documentation.
+
+Do not attempt to generate everything in one uncontrolled step.
+
+After every phase, test existing functionality and preserve the established architecture.
+
+# 27. FINAL EXPECTATION
+
+I want a professional Computer Hardware Diagnostic and Monitoring System.
+
+It should be suitable for:
+- Academic project demonstrations.
+- Computer laboratories.
+- IT support departments.
+- Computer technicians.
+- Personal computer maintenance.
+- Future commercial development.
+
+The application must combine an excellent user interface with real diagnostic functionality.
+
+Do not pretend that unsupported hardware readings are available.
+
+Do not use random numbers as actual hardware measurements.
+
+Do not claim that a computer is completely healthy based on incomplete tests.
+
+Clearly distinguish between live readings, demo data, unsupported sensors and unavailable information.
+
+Start building the actual application.
+
+Prioritize the complete hardware information and diagnostic workflow before implementing advanced features.
+
+At completion, provide:
+1. Application architecture.
+2. Implemented features.
+3. Local diagnostic agent setup.
+4. Hardware compatibility information.
+5. Required dependencies.
+6. Security considerations.
+7. Instructions for running the application.
+8. Deployment instructions.
+
+Build this as a serious hardware diagnostic product, not a decorative dashboard.

@@ -1,0 +1,6 @@
+{
+  "name": "HardwareScope - Hardware Diagnostic & Monitoring",
+  "description": "Professional computer hardware diagnostic and monitoring utility. Inspect hardware specifications, monitor real-time CPU, RAM, GPU, storage, battery and thermal health, run diagnostic tests, detect anomalies, and export reports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
