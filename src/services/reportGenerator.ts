@@ -40,7 +40,7 @@ export function createDiagnosticReport(
 
   return {
     id: 'report-' + Date.now(),
-    title: title || `HardwareScope Diagnostic Audit (${new Date().toLocaleDateString()})`,
+    title: title || `RigSentinel Diagnostic Audit (${new Date().toLocaleDateString()})`,
     createdAt: new Date().toLocaleString(),
     systemSummary,
     healthScore,
@@ -64,7 +64,7 @@ export function exportReportJSON(report: DiagnosticReport) {
   const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(report, null, 2));
   const downloadAnchor = document.createElement('a');
   downloadAnchor.setAttribute('href', dataStr);
-  downloadAnchor.setAttribute('download', `hardwarescope-report-${report.id}.json`);
+  downloadAnchor.setAttribute('download', `rigsentinel-report-${report.id}.json`);
   document.body.appendChild(downloadAnchor);
   downloadAnchor.click();
   downloadAnchor.remove();
@@ -72,7 +72,7 @@ export function exportReportJSON(report: DiagnosticReport) {
 
 export function exportReportCSV(report: DiagnosticReport) {
   const rows: string[][] = [
-    ['HardwareScope Diagnostic Audit Export'],
+    ['RigSentinel Diagnostic Audit Export'],
     ['Report ID', report.id],
     ['Date & Time', report.createdAt],
     ['Overall Health Score', `${report.healthScore}/100`],
@@ -123,7 +123,7 @@ export function exportReportCSV(report: DiagnosticReport) {
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement('a');
   link.setAttribute('href', encodedUri);
-  link.setAttribute('download', `hardwarescope-report-${report.id}.csv`);
+  link.setAttribute('download', `rigsentinel-report-${report.id}.csv`);
   document.body.appendChild(link);
   link.click();
   link.remove();

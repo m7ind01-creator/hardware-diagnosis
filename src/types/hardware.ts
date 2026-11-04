@@ -1,5 +1,5 @@
 /**
- * HardwareScope Types & Data Models
+ * RigSentinel Types & Data Models
  * Defines all hardware representations, telemetry, diagnostic tests, issues, and reports.
  */
 

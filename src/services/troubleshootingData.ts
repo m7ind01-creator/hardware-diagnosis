@@ -21,7 +21,7 @@ export const TROUBLESHOOTING_TOPICS: TroubleshootingTopic[] = [
     safeTroubleshootingSteps: [
       '1. Place the computer on a firm, flat, non-fabric surface (never on a bed, pillow, or carpet).',
       '2. Inspect air intake vents and cooling grilles for lint or dust buildup. Use a can of compressed air in short bursts to blow outward from vents.',
-      '3. Open HardwareScope CPU/GPU monitors to identify if a particular process is keeping utilization elevated.',
+      '3. Open RigSentinel CPU/GPU monitors to identify if a particular process is keeping utilization elevated.',
       '4. If using a desktop PC, ensure that all intake fans and exhaust fans spin freely when powered on.',
       '5. In Windows/macOS power settings, switch from "High Performance" to "Balanced" or "Standard Power" mode.'
     ],
@@ -49,8 +49,8 @@ export const TROUBLESHOOTING_TOPICS: TroubleshootingTopic[] = [
       'Drive health degradation or slow mechanical hard drive (HDD) bottleneck'
     ],
     safeTroubleshootingSteps: [
-      '1. Check the HardwareScope Memory Monitor: If RAM utilization is above 85%, close background browser tabs and memory-hungry applications.',
-      '2. Check HardwareScope Storage Health: Ensure your primary boot drive has at least 20 GB of free space. Run native disk cleanup to remove temporary files.',
+      '1. Check the RigSentinel Memory Monitor: If RAM utilization is above 85%, close background browser tabs and memory-hungry applications.',
+      '2. Check RigSentinel Storage Health: Ensure your primary boot drive has at least 20 GB of free space. Run native disk cleanup to remove temporary files.',
       '3. Open Task Manager (Ctrl+Shift+Esc on Windows) or Activity Monitor (Cmd+Space on Mac) and disable unnecessary "Startup" applications.',
       '4. Run a full antivirus or malware scan to eliminate malicious background miners.',
       '5. Restart the computer to clear out stale memory leaks and accumulated paging caches.'
@@ -79,7 +79,7 @@ export const TROUBLESHOOTING_TOPICS: TroubleshootingTopic[] = [
       'Unstable CPU/RAM overclock or XMP/EXPO profile incompatibility'
     ],
     safeTroubleshootingSteps: [
-      '1. Run the HardwareScope Memory Diagnostic test to check for buffer allocation patterns.',
+      '1. Run the RigSentinel Memory Diagnostic test to check for buffer allocation patterns.',
       '2. If you have enabled CPU overclocking, undervolting, or high-speed XMP/EXPO profiles in BIOS, reset BIOS settings to "Optimized Defaults".',
       '3. Update your graphics card drivers directly from the manufacturer official website (NVIDIA, AMD, or Intel).',
       '4. Inspect the wall outlet and surge protector to make sure power delivery is stable and not loosely connected.',
@@ -135,7 +135,7 @@ export const TROUBLESHOOTING_TOPICS: TroubleshootingTopic[] = [
       'Damaged power adapter cable, loose barrel connector, or worn USB-C charging port'
     ],
     safeTroubleshootingSteps: [
-      '1. Check HardwareScope Battery Health: Compare current Full Charge Capacity against Original Design Capacity.',
+      '1. Check RigSentinel Battery Health: Compare current Full Charge Capacity against Original Design Capacity.',
       '2. If battery health is below 70%, the cells are physically worn and cannot deliver standard runtime.',
       '3. Lower display brightness to 50-60% and toggle dynamic refresh rate in display settings.',
       '4. Try charging using an alternate certified OEM charger and outlet to verify the brick is not failing.',
@@ -165,7 +165,7 @@ export const TROUBLESHOOTING_TOPICS: TroubleshootingTopic[] = [
     ],
     safeTroubleshootingSteps: [
       '1. On Windows, press Ctrl+Win+Shift+B to quickly restart the graphics subsystem driver if display freezes.',
-      '2. Inspect HardwareScope Temperature Monitor: Ensure the CPU or GPU isn\'t hitting 95°C+ right before lockups.',
+      '2. Inspect RigSentinel Temperature Monitor: Ensure the CPU or GPU isn\'t hitting 95°C+ right before lockups.',
       '3. Run System File Checker (Windows: run `sfc /scannow` in Administrator command prompt).',
       '4. If comfortable opening desktop PC (with power disconnected), re-seat RAM sticks and PCIe graphics card firmly into slots.',
       '5. Check for pending Windows / macOS system updates that contain critical kernel stability patches.'
@@ -193,7 +193,7 @@ export const TROUBLESHOOTING_TOPICS: TroubleshootingTopic[] = [
     safeTroubleshootingSteps: [
       '1. On Desktop PCs: Verify the monitor HDMI/DisplayPort cable is plugged into the discrete graphics card, NOT the motherboard I/O panel.',
       '2. In Windows Graphics Settings, set your high-performance applications to use "High Performance (Dedicated GPU)".',
-      '3. Run the HardwareScope GPU Diagnostic test to benchmark shader pipelines and draw call latency.',
+      '3. Run the RigSentinel GPU Diagnostic test to benchmark shader pipelines and draw call latency.',
       '4. Perform a clean graphics driver installation using DDU (Display Driver Uninstaller) or the official NVIDIA/AMD clean install option.',
       '5. Check that GPU power cables (PCIe 8-pin / 12VHPWR) are firmly seated without sharp bends.'
     ],
@@ -209,7 +209,7 @@ export const TROUBLESHOOTING_TOPICS: TroubleshootingTopic[] = [
   {
     id: 'trouble-ram-high',
     title: 'Memory Usage is Unusually High',
-    symptom: 'HardwareScope reports >90% RAM utilization even when no heavy programs are intentionally active.',
+    symptom: 'RigSentinel reports >90% RAM utilization even when no heavy programs are intentionally active.',
     iconName: 'Cpu',
     possibleCauses: [
       'Browser with dozens of suspended background tabs consuming GBs of memory',
@@ -217,7 +217,7 @@ export const TROUBLESHOOTING_TOPICS: TroubleshootingTopic[] = [
       'Non-paged pool memory leak caused by a faulty network card or storage driver'
     ],
     safeTroubleshootingSteps: [
-      '1. Check HardwareScope RAM Monitor: Identify total installed RAM vs used bytes.',
+      '1. Check RigSentinel RAM Monitor: Identify total installed RAM vs used bytes.',
       '2. In your web browser, enable "Memory Saver" or "Tab Snoozing" to automatically unload idle tabs.',
       '3. Restart third-party apps that have been running continuously for days or weeks.',
       '4. If Non-Paged Pool is consuming several gigabytes (in Task Manager > Performance > Memory), update your motherboard network / Ethernet driver.'

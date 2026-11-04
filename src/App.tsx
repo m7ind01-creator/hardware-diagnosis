@@ -1,5 +1,5 @@
 /**
- * HardwareScope: Computer Hardware Diagnostic & Monitoring System
+ * RigSentinel: Computer Hardware Diagnostic & Monitoring System
  */
 
 import React from 'react';
@@ -10,6 +10,7 @@ import { MobileBottomNav } from './components/MobileBottomNav';
 import { AgentConnectionModal } from './components/AgentConnectionModal';
 import { NotificationCenter } from './components/NotificationCenter';
 import { HardwarePermissionModal } from './components/HardwarePermissionModal';
+import { InAppAlertBanner } from './components/InAppAlertBanner';
 
 // Views
 import { OverviewView } from './views/OverviewView';
@@ -87,7 +88,8 @@ const MainContent: React.FC = () => {
         <MobileBottomNav />
       </div>
 
-      {/* Global Modals */}
+      {/* Global Modals & Alerts */}
+      <InAppAlertBanner />
       <HardwarePermissionModal />
       <AgentConnectionModal />
       <NotificationCenter />

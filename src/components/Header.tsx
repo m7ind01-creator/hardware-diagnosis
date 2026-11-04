@@ -42,7 +42,8 @@ export const Header: React.FC<HeaderProps> = ({ viewTitle }) => {
     permissionsState,
     setIsPermissionModalOpen,
     isMobileMenuOpen,
-    setIsMobileMenuOpen
+    setIsMobileMenuOpen,
+    activeAlerts
   } = useHardware();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -184,14 +185,20 @@ export const Header: React.FC<HeaderProps> = ({ viewTitle }) => {
           {/* Notification Bell */}
           <button
             onClick={() => setIsNotificationCenterOpen(true)}
-            className="relative p-1.5 sm:p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
-            title="Notifications & Detected Issues"
+            className={`relative p-1.5 sm:p-2 rounded-lg border transition-colors cursor-pointer ${
+              activeAlerts.length > 0
+                ? 'border-rose-500 bg-rose-50/20 text-rose-600 dark:text-rose-400 animate-pulse'
+                : 'border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+            }`}
+            title="Notifications & Active Hardware Alerts"
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />
-            {detectedIssues.length > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] px-1 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white">
-                {detectedIssues.length}
+            {(activeAlerts.length > 0 || detectedIssues.length > 0) && (
+              <span className={`absolute -top-1 -right-1 flex h-4 min-w-[16px] px-1 items-center justify-center rounded-full text-[10px] font-bold text-white ${
+                activeAlerts.length > 0 ? 'bg-rose-600 animate-bounce' : 'bg-blue-600'
+              }`}>
+                {activeAlerts.length || detectedIssues.length}
               </span>
             )}
           </button>

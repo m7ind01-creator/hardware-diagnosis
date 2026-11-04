@@ -176,7 +176,7 @@ export const ReportsView: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-white">
-                      HardwareScope
+                      RigSentinel
                     </span>
                     <span className="text-xs px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900 font-bold uppercase">
                       Official Hardware Audit

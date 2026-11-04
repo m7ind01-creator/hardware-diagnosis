@@ -54,7 +54,7 @@ export const AgentConnectionModal: React.FC = () => {
     } else {
       setTestResult({
         ok: false,
-        msg: 'Could not connect. Ensure `node hardwarescope-agent.mjs` is actively running in your terminal.'
+        msg: 'Could not connect. Ensure `node rigsentinel-agent.mjs` is actively running in your terminal.'
       });
     }
   };
@@ -154,7 +154,7 @@ export const AgentConnectionModal: React.FC = () => {
                 Step 2: Run in your terminal
               </span>
               <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 text-slate-100 font-mono text-xs overflow-x-auto gap-2">
-                <code className="text-blue-300">node hardwarescope-agent.mjs</code>
+                <code className="text-blue-300">node rigsentinel-agent.mjs</code>
                 <Terminal className="w-4 h-4 text-slate-400 ml-2 flex-shrink-0" />
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400">

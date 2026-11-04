@@ -700,7 +700,7 @@ export function getDemoHardwareProfile(tickCount: number = 0): {
     architecture: 'x86_64 (64-bit)',
     hostname: 'WORKSTATION-DEMO',
     uptimeSeconds: 143890,
-    browserUserAgent: 'HardwareScope Simulated Workstation Host',
+    browserUserAgent: 'RigSentinel Simulated Workstation Host',
     chassisType: 'Laptop',
     dataSource: 'demo-data',
     lastUpdated: new Date().toLocaleTimeString()

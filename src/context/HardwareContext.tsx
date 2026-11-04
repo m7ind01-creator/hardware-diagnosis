@@ -1,6 +1,6 @@
 /**
  * HardwareContext
- * Central state orchestrator for HardwareScope.
+ * Central state orchestrator for RigSentinel.
  * Handles continuous telemetry polling, agent sync, demo mode,
  * diagnostic test execution, rule-based anomaly detection, hardware permissions, and settings.
  */
@@ -201,6 +201,11 @@ export const HardwareProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [display, setDisplay] = useState<DisplayInfo | null>(null);
   const [network, setNetwork] = useState<NetworkInfo | null>(null);
 
+  // Active Hardware Alerts System
+  const [activeAlerts, setActiveAlerts] = useState<ActiveHardwareAlert[]>([]);
+  const snoozedAlertsRef = useRef<Map<string, number>>(new Map());
+  const lastAudioAlertTimeRef = useRef<number>(0);
+
   // Diagnostics & Issues
   const [diagnostics, setDiagnostics] = useState<DiagnosticTest[]>(INITIAL_TESTS);
   const [isDiagnosticRunning, setIsDiagnosticRunning] = useState(false);
@@ -256,7 +261,7 @@ export const HardwareProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, []);
 
   // Background Daemon Scanner: checks http://127.0.0.1:49152 every 3s
-  // so if the user executes `node hardwarescope-agent.mjs` in terminal, it automatically locks in!
+  // so if the user executes `node rigsentinel-agent.mjs` in terminal, it automatically locks in!
   useEffect(() => {
     let active = true;
     const interval = setInterval(async () => {
@@ -571,6 +576,125 @@ export const HardwareProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setSummaryText(health.summaryText);
   }, [cpu, ram, gpu, storage, thermals, battery, system, settings]);
 
+  // Monitor Critical Temperature & Storage Health drops in real-time
+  useEffect(() => {
+    const now = Date.now();
+    const newAlerts: ActiveHardwareAlert[] = [];
+
+    // 1. Temperature Alert Check
+    for (const sensor of thermals) {
+      if (sensor.currentTempC === null) continue;
+      const alertId = `temp-${sensor.id}`;
+      const snoozeUntil = snoozedAlertsRef.current.get(alertId);
+      if (snoozeUntil && snoozeUntil > now) continue;
+
+      if (sensor.currentTempC >= settings.tempCriticalThresholdC) {
+        newAlerts.push({
+          id: alertId,
+          type: 'temperature_critical',
+          title: `CRITICAL OVERHEAT: ${sensor.label} at ${sensor.currentTempC}°C`,
+          message: `${sensor.component} temperature has reached ${sensor.currentTempC}°C, exceeding the safe limit of ${settings.tempCriticalThresholdC}°C. High risk of thermal throttling or emergency shutdown.`,
+          component: sensor.component,
+          currentValue: `${sensor.currentTempC}°C`,
+          thresholdValue: `${settings.tempCriticalThresholdC}°C`,
+          severity: 'critical',
+          timestamp: now,
+          viewTarget: 'temperature'
+        });
+      } else if (sensor.currentTempC >= settings.tempWarningThresholdC) {
+        const warnId = `temp-warn-${sensor.id}`;
+        const warnSnooze = snoozedAlertsRef.current.get(warnId);
+        if (!warnSnooze || warnSnooze <= now) {
+          newAlerts.push({
+            id: warnId,
+            type: 'temperature_warning',
+            title: `WARNING: High Thermal Load on ${sensor.label}`,
+            message: `${sensor.component} is operating at ${sensor.currentTempC}°C, approaching the critical threshold of ${settings.tempCriticalThresholdC}°C.`,
+            component: sensor.component,
+            currentValue: `${sensor.currentTempC}°C`,
+            thresholdValue: `${settings.tempWarningThresholdC}°C`,
+            severity: 'warning',
+            timestamp: now,
+            viewTarget: 'temperature'
+          });
+        }
+      }
+    }
+
+    // 2. Storage Health Alert Check
+    for (const drive of storage) {
+      const healthAlertId = `storage-health-${drive.id}`;
+      const healthSnooze = snoozedAlertsRef.current.get(healthAlertId);
+
+      const hasDegradedSmart = drive.smartAttributes?.some(a => a.status === 'warning' || a.status === 'failed');
+      const isHealthDropped = drive.healthStatus === 'Critical' || drive.healthStatus === 'Caution' || hasDegradedSmart;
+
+      if (isHealthDropped && (!healthSnooze || healthSnooze <= now)) {
+        newAlerts.push({
+          id: healthAlertId,
+          type: 'storage_health_drop',
+          title: `STORAGE HEALTH DEGRADED: ${drive.name}`,
+          message: `Drive health status has dropped to ${drive.healthStatus.toUpperCase()}. Telemetry indicates potential drive degradation or S.M.A.R.T. warnings.`,
+          component: drive.name,
+          currentValue: drive.healthStatus,
+          thresholdValue: 'Healthy',
+          severity: drive.healthStatus === 'Critical' ? 'critical' : 'warning',
+          timestamp: now,
+          viewTarget: 'storage'
+        });
+      }
+
+      // Storage Free Space Check
+      if (drive.totalBytes > 0) {
+        const freePct = Math.round((drive.availableBytes / drive.totalBytes) * 100);
+        const freeGb = Math.round(drive.availableBytes / (1024 ** 3));
+        const spaceAlertId = `storage-space-${drive.id}`;
+        const spaceSnooze = snoozedAlertsRef.current.get(spaceAlertId);
+
+        if ((freePct <= settings.storageWarningThresholdPercent || freeGb <= 15) && (!spaceSnooze || spaceSnooze <= now)) {
+          newAlerts.push({
+            id: spaceAlertId,
+            type: 'storage_low_space',
+            title: `STORAGE CAPACITY CRITICAL: ${drive.name}`,
+            message: `Free space on ${drive.name} has dropped to ${freePct}% (${freeGb} GB free). Low disk space can degrade system virtual memory performance.`,
+            component: drive.name,
+            currentValue: `${freePct}% (${freeGb} GB)`,
+            thresholdValue: `${settings.storageWarningThresholdPercent}%`,
+            severity: freePct <= 5 ? 'critical' : 'warning',
+            timestamp: now,
+            viewTarget: 'storage'
+          });
+        }
+      }
+    }
+
+    if (newAlerts.length > 0) {
+      setActiveAlerts(prev => {
+        const existingIds = new Set(newAlerts.map(a => a.id));
+        const kept = prev.filter(a => !existingIds.has(a.id));
+        return [...newAlerts, ...kept].slice(0, 5);
+      });
+
+      // Play audio chime and desktop notification with a 15-second debounce
+      if (now - lastAudioAlertTimeRef.current > 15000) {
+        lastAudioAlertTimeRef.current = now;
+        const hasCritical = newAlerts.some(a => a.severity === 'critical');
+        if (settings.audioAlerts) {
+          if (hasCritical) soundAlertService.playCriticalAlertSound();
+          else soundAlertService.playWarningAlertSound();
+        }
+        if (settings.desktopNotifications) {
+          const firstAlert = newAlerts[0];
+          soundAlertService.showDesktopNotification(
+            `RigSentinel: ${firstAlert.title}`,
+            firstAlert.message,
+            firstAlert.id
+          );
+        }
+      }
+    }
+  }, [thermals, storage, settings.tempCriticalThresholdC, settings.tempWarningThresholdC, settings.storageWarningThresholdPercent, settings.audioAlerts, settings.desktopNotifications]);
+
   // Diagnostic Test Runner
   const runFullDiagnostic = useCallback(async () => {
     if (isDiagnosticRunning) return;
@@ -736,6 +860,66 @@ export const HardwareProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } catch {}
   }, []);
 
+  const dismissAlert = useCallback((id: string) => {
+    setActiveAlerts(prev => prev.filter(a => a.id !== id));
+  }, []);
+
+  const snoozeAlert = useCallback((id: string, durationMs: number = 5 * 60 * 1000) => {
+    snoozedAlertsRef.current.set(id, Date.now() + durationMs);
+    setActiveAlerts(prev => prev.filter(a => a.id !== id));
+  }, []);
+
+  const clearAllAlerts = useCallback(() => {
+    setActiveAlerts([]);
+  }, []);
+
+  const triggerSimulatedAlert = useCallback((type: 'thermal' | 'storage') => {
+    const now = Date.now();
+    if (type === 'thermal') {
+      const simAlert: ActiveHardwareAlert = {
+        id: `sim-thermal-${now}`,
+        type: 'temperature_critical',
+        title: 'CRITICAL OVERHEAT: CPU Package at 94°C',
+        message: `CPU Package temperature has spiked to 94°C, breaching the critical ${settings.tempCriticalThresholdC}°C threshold. Emergency thermal throttling active.`,
+        component: 'CPU Package',
+        currentValue: '94°C',
+        thresholdValue: `${settings.tempCriticalThresholdC}°C`,
+        severity: 'critical',
+        timestamp: now,
+        viewTarget: 'temperature'
+      };
+      setActiveAlerts(prev => [simAlert, ...prev.filter(a => a.id !== simAlert.id)]);
+      if (settings.audioAlerts) soundAlertService.playCriticalAlertSound();
+      if (settings.desktopNotifications) {
+        soundAlertService.showDesktopNotification(
+          'RigSentinel: Critical Temperature Alert',
+          `CPU Package at 94°C (Limit: ${settings.tempCriticalThresholdC}°C). Throttling active.`
+        );
+      }
+    } else {
+      const simAlert: ActiveHardwareAlert = {
+        id: `sim-storage-${now}`,
+        type: 'storage_health_drop',
+        title: 'STORAGE HEALTH CRITICAL: Primary NVMe SSD',
+        message: 'Primary NVMe SSD reported degraded S.M.A.R.T. health status and available free space dropped to 6% (9 GB remaining).',
+        component: 'NVMe SSD',
+        currentValue: 'Critical / 6% Free',
+        thresholdValue: `Healthy / >${settings.storageWarningThresholdPercent}% Free`,
+        severity: 'critical',
+        timestamp: now,
+        viewTarget: 'storage'
+      };
+      setActiveAlerts(prev => [simAlert, ...prev.filter(a => a.id !== simAlert.id)]);
+      if (settings.audioAlerts) soundAlertService.playCriticalAlertSound();
+      if (settings.desktopNotifications) {
+        soundAlertService.showDesktopNotification(
+          'RigSentinel: Storage Health Alert',
+          'Primary NVMe SSD reported degraded S.M.A.R.T. health and 6% free space.'
+        );
+      }
+    }
+  }, [settings.tempCriticalThresholdC, settings.storageWarningThresholdPercent, settings.audioAlerts, settings.desktopNotifications]);
+
   return (
     <HardwareContext.Provider value={{
       system,
@@ -771,6 +955,7 @@ export const HardwareProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       permissionsState,
       isPermissionModalOpen,
       isMobileMenuOpen,
+      activeAlerts,
       setIsMobileMenuOpen,
       setActiveView,
       refreshHardwareData,
@@ -793,7 +978,11 @@ export const HardwareProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       authorizeFileSystemAccess,
       authorizeWebHIDDevice,
       authorizeStorageQuota,
-      fixHardwareIssue
+      fixHardwareIssue,
+      dismissAlert,
+      snoozeAlert,
+      clearAllAlerts,
+      triggerSimulatedAlert
     }}>
       {children}
     </HardwareContext.Provider>

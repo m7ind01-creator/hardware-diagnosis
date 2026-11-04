@@ -22,7 +22,7 @@ export const HardwareSpecsView: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const generateSpecsSummaryText = () => {
-    return `=== HARDWARESCOPE SYSTEM SPECIFICATIONS ===
+    return `=== RIGSENTINEL SYSTEM SPECIFICATIONS ===
 Export Date: ${new Date().toLocaleString()}
 Computer Model: ${system.computerModel}
 Manufacturer: ${system.manufacturer}

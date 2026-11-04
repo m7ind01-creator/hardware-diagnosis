@@ -100,10 +100,10 @@ export const Sidebar: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-sm tracking-tight text-slate-900 dark:text-white truncate">
-                  {settings.systemNameOverride || 'PC Diagnostics'}
+                  {settings.systemNameOverride || 'RigSentinel'}
                 </span>
                 <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                  Hardware &amp; System Health
+                  Hardware &amp; System Sentinel
                 </span>
               </div>
             </div>
@@ -242,10 +242,10 @@ export const Sidebar: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-sm tracking-tight text-slate-900 dark:text-white">
-                {settings.systemNameOverride || 'PC Diagnostics'}
+                {settings.systemNameOverride || 'RigSentinel'}
               </span>
               <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                Hardware &amp; System Health
+                Hardware &amp; System Sentinel
               </span>
             </div>
           </div>

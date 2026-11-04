@@ -5,11 +5,11 @@
 
 export const AGENT_SCRIPT_CODE = `#!/usr/bin/env node
 /**
- * HardwareScope Local Diagnostic Agent
+ * RigSentinel Local Diagnostic Agent
  * A lightweight, zero-dependency localhost hardware monitoring service.
  * 
  * Binds strictly to 127.0.0.1 (localhost) to guarantee privacy and security.
- * Exposes read-only hardware inspection endpoints for the HardwareScope web client.
+ * Exposes read-only hardware inspection endpoints for the RigSentinel web client.
  */
 
 import http from 'node:http';
@@ -19,7 +19,7 @@ import { execSync } from 'node:child_process';
 
 const PORT = process.env.PORT || 49152;
 const HOST = '127.0.0.1'; // Localhost only for security
-const AUTH_TOKEN = process.env.HARDWARESCOPE_TOKEN || '';
+const AUTH_TOKEN = process.env.RIGSENTINEL_TOKEN || process.env.HARDWARESCOPE_TOKEN || '';
 
 function safeExec(command) {
   try {
@@ -491,7 +491,7 @@ const server = http.createServer((req, res) => {
 
   if (url === '/api/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'ok', agent: 'HardwareScope-Agent', version: '1.2.0', platform: os.platform() }));
+    res.end(JSON.stringify({ status: 'ok', agent: 'RigSentinel-Agent', version: '1.2.0', platform: os.platform() }));
     return;
   }
 
@@ -508,11 +508,11 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(\`=======================================================\`);
-  console.log(\`  HardwareScope Local Diagnostic Agent v1.2.0\`);
+  console.log(\`  RigSentinel Local Diagnostic Agent v1.2.0\`);
   console.log(\`  Listening strictly on http://\${HOST}:\${PORT}\`);
   console.log(\`  Zero external telemetry. All metrics read locally.\`);
   console.log(\`=======================================================\`);
-  console.log(\`Ready for connection from HardwareScope Web Dashboard.\`);
+  console.log(\`Ready for connection from RigSentinel Web Dashboard.\`);
 });
 `;
 
@@ -521,7 +521,7 @@ export function downloadAgentScriptFile() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'hardwarescope-agent.mjs';
+  a.download = 'rigsentinel-agent.mjs';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
