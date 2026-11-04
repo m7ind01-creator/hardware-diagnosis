@@ -22,7 +22,8 @@ import {
   DiagnosticReport, 
   AppSettings, 
   TelemetryPoint,
-  HardwarePermissionsState
+  HardwarePermissionsState,
+  ActiveHardwareAlert
 } from '../types/hardware';
 import { 
   detectSystemSpecs, 
@@ -45,19 +46,21 @@ import {
 } from '../services/diagnosticEngine';
 import { createDiagnosticReport } from '../services/reportGenerator';
 import { hardwarePermissionService } from '../services/hardwarePermissionService';
+import { soundAlertService } from '../services/soundAlertService';
 
 const DEFAULT_SETTINGS: AppSettings = {
   theme: 'dark',
   refreshIntervalMs: 2000,
   tempWarningThresholdC: 80,
-  tempCriticalThresholdC: 92,
+  tempCriticalThresholdC: 90,
   memWarningThresholdPercent: 85,
   storageWarningThresholdPercent: 15,
   cpuWarningThresholdPercent: 85,
   agentPort: 49152,
   agentAuthToken: '',
   demoMode: false,
-  audioAlerts: false,
+  audioAlerts: true,
+  desktopNotifications: false,
   systemNameOverride: ''
 };
 
@@ -105,6 +108,7 @@ interface HardwareContextType {
   permissionsState: HardwarePermissionsState;
   isPermissionModalOpen: boolean;
   isMobileMenuOpen: boolean;
+  activeAlerts: ActiveHardwareAlert[];
   
   // Actions
   setIsMobileMenuOpen: (open: boolean) => void;
@@ -130,6 +134,10 @@ interface HardwareContextType {
   authorizeWebHIDDevice: () => Promise<void>;
   authorizeStorageQuota: () => Promise<void>;
   fixHardwareIssue: (issue: HardwareIssue) => Promise<void>;
+  dismissAlert: (id: string) => void;
+  snoozeAlert: (id: string, durationMs?: number) => void;
+  clearAllAlerts: () => void;
+  triggerSimulatedAlert: (type: 'thermal' | 'storage') => void;
 }
 
 const HardwareContext = createContext<HardwareContextType | null>(null);

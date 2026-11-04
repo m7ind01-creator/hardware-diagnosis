@@ -233,6 +233,20 @@ export interface TroubleshootingTopic {
   preventativeTips: string[];
 }
 
+export interface ActiveHardwareAlert {
+  id: string;
+  type: 'temperature_critical' | 'temperature_warning' | 'storage_health_drop' | 'storage_low_space';
+  title: string;
+  message: string;
+  component: string;
+  currentValue: string;
+  thresholdValue: string;
+  severity: 'critical' | 'warning';
+  timestamp: number;
+  viewTarget: 'temperature' | 'storage' | 'troubleshooting';
+  dismissed?: boolean;
+}
+
 export interface AppSettings {
   theme: 'dark' | 'light';
   refreshIntervalMs: number;
@@ -245,6 +259,7 @@ export interface AppSettings {
   agentAuthToken: string;
   demoMode: boolean;
   audioAlerts: boolean;
+  desktopNotifications: boolean;
   systemNameOverride?: string;
 }
 
